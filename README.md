@@ -12,9 +12,8 @@ Soft sharing is offered as stand-alone PyTorch modules (in models/layers.py), wh
 
 ## Requirements
 ```
-Python 2, PyTorch == 0.4.0, torchvision == 0.2.1
+Python 3, PyTorch >= 0.4.0, torchvision >= 0.2.1
 ```
-The repository should also work with Python 3.
 
 [BayesWatch's ImageNet Loader](https://github.com/BayesWatch/sequential-imagenet-dataloader) is required for ImageNet training.
 
