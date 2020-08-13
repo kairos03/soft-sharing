@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import init
 
+
 class TemplateBank(nn.Module):
     def __init__(self, num_templates, in_planes, out_planes, kernel_size):
         super(TemplateBank, self).__init__()
@@ -13,6 +14,7 @@ class TemplateBank(nn.Module):
 
     def forward(self, coefficients):
         return (self.templates*coefficients).sum(0)
+
 
 class SConv2d(nn.Module):
     def __init__(self, bank, stride=1, padding=1):

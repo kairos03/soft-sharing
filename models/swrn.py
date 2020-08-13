@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 from torch.nn import init
-from layers import *
+from .layers import *
+
 
 class Block(nn.Module):
     def __init__(self, in_planes, out_planes, stride, bank=None):
@@ -28,13 +29,14 @@ class Block(nn.Module):
         if self.convShortcut is not None: residual = self.convShortcut(residual)
         return out + residual
 
+
 class SWRN(nn.Module):
     def __init__(self, depth, width, num_templates, num_classes):
         super(SWRN, self).__init__()
 
         n_channels = [16, 16*width, 32*width, 64*width]
         assert((depth - 4) % 6 == 0)
-        num_blocks = (depth - 4) / 6
+        num_blocks = int((depth - 4) / 6)
         layers_per_bank = 2*(num_blocks-1)
         print ('SWRN : Depth : {} , Widen Factor : {}, Templates per Group : {}'.format(depth, width, num_templates))
 
@@ -59,7 +61,7 @@ class SWRN(nn.Module):
         for i in range(1,4):
             coefficient_inits = torch.zeros((layers_per_bank,num_templates,1,1,1,1))
             nn.init.orthogonal_(coefficient_inits)
-            sconv_group = filter(lambda (name, module): isinstance(module, SConv2d) and "stage_%s"%i in name, self.named_modules())
+            sconv_group = filter(lambda x: isinstance(x[1], SConv2d) and "stage_%s"%i in x[0], self.named_modules())
             for j, (name, module) in enumerate(sconv_group): module.coefficients.data = coefficient_inits[j]
 
         for m in self.modules():
